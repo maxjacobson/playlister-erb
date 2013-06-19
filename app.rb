@@ -1,7 +1,3 @@
-Artist.reset_artists
-Genre.reset_genres
-Song.reset_songs
-
 class Jukebox
   attr_accessor :on
   def initialize(mp3_directory)
@@ -31,7 +27,7 @@ class Jukebox
 
   def help(msg = "")
     puts msg unless msg.empty?
-    puts "Available commands: artists, genres, songs, songs by artist, songs by genre, [genre] songs, songs by [artist name], help, exit"
+    puts "Available commands: 'artists', 'genres', 'songs', 'songs by artist', 'songs by genre', '[genre name] songs', 'songs by [artist name]', 'who made [song name]', 'help', 'exit'"
   end
 
   def songs_by_artist(choice)
@@ -50,9 +46,17 @@ class Jukebox
     end
   end
 
+  def who_made(choice)
+    if Song.all.any? {|song| song.name.downcase == choice.downcase }
+      puts Song.all.select{|song| song.name.downcase == choice.downcase }[0].artist.name
+    else
+      puts "No song by that name"
+    end
+  end
+
   def start
     @on = true
-    help("\nWelcome to Jukebox")
+    help("\n### Welcome to Jukebox ###\n")
     
 
     while on?
@@ -82,6 +86,9 @@ class Jukebox
       when /songs by (.+)/
         choice = command.split("songs by ")[1].strip
         songs_by_artist(choice)
+      when /who made (.+)/
+        choice = command.split("who made ")[1].strip
+        who_made(choice)
       when "exit"
         @on = false
       else
@@ -93,9 +100,11 @@ class Jukebox
   def on?
     @on
   end
-
-
 end
+
+Artist.reset_artists
+Genre.reset_genres
+Song.reset_songs
 
 jb = Jukebox.new("data")
 jb.start
