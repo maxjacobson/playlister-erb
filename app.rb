@@ -1,7 +1,17 @@
+require_relative 'lib/artist'
+require_relative 'lib/song'
+require_relative 'lib/genre'
+require 'pry'
+require 'pp'
+
 class Jukebox
   attr_accessor :on
   def initialize(mp3_directory)
+    Artist.reset_artists
+    Genre.reset_genres
+    Song.reset_songs
     parse_directory(mp3_directory)
+    start
   end
 
   def parse_directory(dir_name)
@@ -11,13 +21,13 @@ class Jukebox
       song_name = filename.split(" - ")[1].split("[")[0].strip
       genre_name = filename.split(" - ")[1].split(/\[|\]/)[1]
 
-      artist = Artist.find_by_name(artist_name) || Artist.new
+      artist = Artist.find_by_name(artist_name) || Artist.new # use tap here to assign name
       artist.name = artist_name
       
       song = Song.new
       song.name = song_name
       
-      genre = Genre.find_by_name(genre_name) || Genre.new
+      genre = Genre.find_by_name(genre_name) || Genre.new # use tap here to assign name
       genre.name = genre_name
 
       song.genre = genre
@@ -27,7 +37,7 @@ class Jukebox
 
   def help(msg = "")
     puts msg unless msg.empty?
-    puts "Available commands: 'artists', 'genres', 'songs', 'songs by artist', 'songs by genre', '[genre name] songs', 'songs by [artist name]', 'who made [song name]', 'help', 'exit'"
+    puts "Available commands: 'artists', 'genres', 'songs', 'songs by artist', 'songs by genre', '[genre name] songs', 'songs by [artist name]', 'who made by song name', 'who made [song name]', 'genre by song name', 'what genre is [song name]' 'help', 'exit'"
   end
 
   def songs_by_artist(choice)
@@ -54,9 +64,17 @@ class Jukebox
     end
   end
 
+  def what_genre_is(choice)
+    if Song.all.any? {|song| song.name.downcase == choice.downcase }
+      puts Song.all.select{|song| song.name.downcase == choice.downcase }[0].genre.name
+    else
+      puts "No song by that name"
+    end
+  end
+
   def start
     @on = true
-    help("\n### Welcome to Jukebox ###\n")
+    help("### Welcome to Jukebox ###")
     
 
     while on?
@@ -86,6 +104,19 @@ class Jukebox
       when /songs by (.+)/
         choice = command.split("songs by ")[1].strip
         songs_by_artist(choice)
+      when "genre by song name"
+        puts "Which song?"
+        print ">> "
+        choice = gets.chomp
+        what_genre_is(choice)
+      when /what genre is (.+)/
+        choice = command.split("what genre is ")[1].strip
+        what_genre_is(choice)
+      when "who made by song name"
+        puts "Which song?"
+        print ">> "
+        choice = gets.chomp
+        who_made(choice)
       when /who made (.+)/
         choice = command.split("who made ")[1].strip
         who_made(choice)
@@ -101,10 +132,4 @@ class Jukebox
     @on
   end
 end
-
-Artist.reset_artists
-Genre.reset_genres
-Song.reset_songs
-
-jb = Jukebox.new("data")
-jb.start
+Jukebox.new("data")
