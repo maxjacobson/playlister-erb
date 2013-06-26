@@ -65,9 +65,6 @@ module JukeboxSite
     end
     post '/song/new/process' do
 
-      # I can't get new song creation to work
-      # should I create an mp3 file???
-      # no errors! just doesn't work
       artist_name = params[:artist]
       song_name = params[:song]
       genre_name = params[:genre]
@@ -82,14 +79,21 @@ module JukeboxSite
       song.genre = genre
       artist.add_song(song)
 
-      File.open("data/#{artist_name}\ -\ #{song_name}\ [#{genre_name}].mp3", "w") do |f|
-        f.write "sup"
-      end
-      # system("touch data/#{artist_name}\ -\ #{song_name}\ [#{genre_name}].mp3")
+      # is this even necessary?
+      File.open("data/#{artist_name}\ -\ #{song_name}\ [#{genre_name}].mp3", "w")
+
+      # doesn't work
+      # Song.all.each_with_index do |song, index|
+      #   if song.name == song_name
+      #     redirect "/song/#{index - 1}"
+      #   end
+      # end
 
       redirect "/songs"
     end
     get '/song/:id' do
+      # I have this here to get the embedcode when displaying a song
+      # there are probably other ways to do it
       @songs = Song.all
       @song = Song.all[params[:id].to_i - 1]
       id = YoutubeSearch.search("#{@song.artist.name} - #{@song.name}").first["video_id"]
