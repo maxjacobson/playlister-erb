@@ -3,6 +3,7 @@ require_relative 'lib/song'
 require_relative 'lib/genre'
 require 'pry'
 require 'pp'
+require 'awesome_print'
 
 class Jukebox
   attr_accessor :on
@@ -11,7 +12,7 @@ class Jukebox
     Genre.reset_genres
     Song.reset_songs
     parse_directory(mp3_directory)
-    start
+    # start
   end
 
   def parse_directory(dir_name)
@@ -31,6 +32,7 @@ class Jukebox
       song.genre = genre
       artist.add_song(song)
     end
+    # ap Artist.all
   end
 
   def help(msg = "")
@@ -38,11 +40,14 @@ class Jukebox
     puts "help text"
   end
 
-  def start
-    p Artist.all.collect{|a| a.name}
-    puts "game loop starts here!"
-  end
+  # def start
+  #   # # p Artist.all.collect{|a| a.name}
+  #   # # pp Artist.all
+  #   # puts "game loop starts here!"
+  #   # puts Artist.all.collect{|artist| artist.name}
+  # end
 
 end
 
-Jukebox.new("data")
+# Jukebox.new("data")
+
