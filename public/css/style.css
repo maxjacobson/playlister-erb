@@ -1,0 +1,15 @@
+body {
+  width: 600px;
+  margin: 25px auto;
+}
+.main {
+  border-radius: 25px;
+  background-color: lightblue;
+  padding: 25px;
+}
+nav ul {
+  display: inline;
+}
+nav li {
+  display: inline;
+}

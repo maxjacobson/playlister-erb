@@ -1,0 +1,24 @@
+<h2><%= @song.artist.name %> - <%= @song.name %></h2>
+<%= @embedcode %>
+
+<h3>Other <%= @song.artist.name %> songs</h3>
+<ul>
+  <% @songs.each_with_index do |song, index| %>
+    <% if song.artist.name == @song.artist.name %>
+      <li>
+        <a href="/song/<%= index + 1 %>"><%= song.artist.name %> - <%= song.name %></a>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+<h3>Other <%= @song.genre.name %> songs</h3>
+<ul>
+  <% @songs.each_with_index do |song, index| %>
+    <% if song.genre.name == @song.genre.name %>
+      <li>
+        <a href="/song/<%= index + 1 %>"><%= song.artist.name %> - <%= song.name %></a>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

@@ -1,0 +1,6 @@
+<h2>Artists</h2>
+<ol>
+  <% @artists.each_with_index do |artist, index| %>
+    <li><a href="/artist/<%= index + 1 %>"><%= artist.name %></a></li>
+  <% end %>
+</ol>

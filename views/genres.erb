@@ -1,0 +1,9 @@
+<h2>Genres</h2>
+
+<ol>
+  <% @genres.each_with_index do |genre, index| %>
+    <li>
+      <a href="/genre/<%= index + 1 %>"><%= genre.name %></a>
+    </li>
+  <% end %>
+</ol>

@@ -1,0 +1,11 @@
+<h2><%= @genre.name %>  songs</h2>
+
+<ul>
+  <% @songs.each_with_index do |song, index| %>
+    <% if song.genre.name == @genre.name %>
+      <li>
+        <a href="/song/<%= index + 1 %>"><%= song.artist.name %> - <%= song.name %></a>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
