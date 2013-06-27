@@ -96,9 +96,6 @@ module JukeboxSite
       # there are probably other ways to do it
       @songs = Song.all
       @song = Song.all[params[:id].to_i - 1]
-      id = YoutubeSearch.search("#{@song.artist.name} - #{@song.name}").first["video_id"]
-      url = "http://www.youtube.com/watch?v=#{id}"
-      @embedcode = OEmbed::Providers::Youtube.get(url).html
       erb :song
     end
 
